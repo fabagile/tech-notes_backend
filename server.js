@@ -12,7 +12,7 @@ const mongoose = require('mongoose')
 // const {logEvents} = require('./middleware/logger')
 const PORT = process.env.PORT || 3500
 
-const {log, table} = console
+const { log, table } = console
 connectDB()
 log(`Process env: ${process.env.NODE_ENV}`)
 // log(`Port: ${process.env.PORT}`)
@@ -43,13 +43,12 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler)
 
-mongoose.connection.once('open', ()=> {
+mongoose.connection.once('open', () => {
   log('Connected to MongoDB.')
   app.listen(PORT, () => log(`Server running on port ${PORT}`))
-
 })
 
-mongoose.connection.on('error', err=> {
+mongoose.connection.on('error', err => {
   log(err)
   logEvents(`${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`, 'mongoErrLog.log')
 })
