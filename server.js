@@ -1,17 +1,20 @@
 require('dotenv').config()
 const express = require('express')
-const app = express()
 const path = require('path')
-const { logger, logEvents } = require('./middleware/logger')
-const errorHandler = require('./middleware/errorHandler')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
+const mongoose = require('mongoose')
+
 const corsOptions = require('./config/corsOptions')
 const connectDB = require('./config/dbConn')
-const mongoose = require('mongoose')
+const { logger, logEvents } = require('./middleware/logger')
+const errorHandler = require('./middleware/errorHandler')
 // const {logEvents} = require('./middleware/logger')
+const userRoutes = require('./routes/userRoutes')
+
 const PORT = process.env.PORT || 3500
 
+const app = express()
 const { log, table } = console
 connectDB()
 log(`Process env: ${process.env.NODE_ENV}`)
@@ -29,6 +32,7 @@ app.use(cookieParser())
 app.use('/', express.static(path.join(__dirname, 'public')))
 
 app.use('/', require('./routes/root'))
+app.use('/users', userRoutes)
 
 app.all('*', (req, res) => {
   res.status(404)
